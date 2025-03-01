@@ -8,6 +8,7 @@ namespace Core
         private Creature Enemy;
 
         private IFightingStrategy FightingStrategy;
+        [Zenject.Inject] private FightReferee Referee;
 
         public StateFighting(Creature Enemy)
         {
@@ -32,7 +33,8 @@ namespace Core
 
         private void ChooseWhoDies()
         {
-            FightingStrategy.OnFight(Creature, Enemy, new FightSyncronizer());
+            FightSession Session = Referee.GetCurrentFight(Creature, Enemy);
+            FightingStrategy.OnFight(Creature, Enemy, Session);
         }
     }
 }

@@ -6,31 +6,54 @@ namespace Core
 {
     public class FightReferee : MonoBehaviour
     {
-        private Dictionary<Creature, FightSession> ActiveFights = new Dictionary<Creature, FightSession>();
+        private Dictionary<string, FightSession> ActiveFights = new Dictionary<string, FightSession>();
 
-        public FightSession GetCurrentFight(Creature Creature)
+        public FightSession GetCurrentFight(Creature Creature, Creature Enemy)
         {
-            if (!ActiveFights.ContainsKey(Creature)) return new FightSession();
+            string FightKey = ReturnSortedString(Creature.gameObject, Enemy.gameObject);
+            if (!ActiveFights.ContainsKey(FightKey))
+            {
+                FightSession NewSession = new FightSession(FightKey);
 
-            return ActiveFights[Creature];
+                NewSession.OnEnded += () => { OnFightEnded(NewSession); };
+
+                ActiveFights.Add(FightKey, NewSession);
+
+                return NewSession;
+            }
+
+            return ActiveFights[FightKey];
         }
 
-        public void AddCreatureToFight(Creature Creature)
+        public void OnFightEnded(FightSession Session)
         {
+            if (!ActiveFights.ContainsKey(Session.FightID)) throw new Exception("No fight with " + Session.FightID + " found");
+            ActiveFights.Remove(Session.FightID);
+        }
 
+        private string ReturnSortedString(GameObject F, GameObject S)
+        {
+            int F_ID = F.GetInstanceID();
+            int S_ID = S.GetInstanceID();
+
+            return Math.Min(F_ID, S_ID).ToString() + Math.Max(F_ID, S_ID).ToString();
         }
     }
 
-    public class FightSession
+    public class FightSession                                   // A way to keep collisions synchronized (For two objects only!)
     {
-        private List<Creature> WannaKill;
-        private List<Creature> WannaFlee;
+        public string FightID { get; private set; }
+        public List<Creature> WannaKill { get; private set; }   // This (List) is just a nice way to keep it logical - but there's always only two involvants!
+        public List<Creature> WannaFlee { get; private set; }
 
         public Action<Creature> OnAlive;
+        public Action<Creature> OnAliveAndKilled;
         public Action<Creature> OnDead;
+        public Action OnEnded;
 
-        public FightSession()
+        public FightSession(string ID)
         {
+            FightID = ID;
             WannaKill = new List<Creature>();
             WannaFlee = new List<Creature>();
         }
@@ -47,7 +70,7 @@ namespace Core
             TryEndFight();
         }
 
-        private void TryEndFight()
+        private void TryEndFight() // meaning "try to resolve conflict": if there's already two involvants, then via some logic, tell each one of them what happened: they died, fleed, or alive (and killed someone)
         {
             if (WannaKill.Count + WannaFlee.Count < 2) return;
 
@@ -69,13 +92,15 @@ namespace Core
             foreach (Creature Creature in WannaFlee)
                 OnDead?.Invoke(Creature);
 
-            OnAlive?.Invoke(Winner); // It can be called at start, in the middle, or at the end - doesn't really matter (fyi)
+            OnAliveAndKilled?.Invoke(Winner); // It can be called at start, in the middle, or at the end - doesn't really matter (fyi)
+            OnEnded?.Invoke();
         }
 
         private void Peaceful()
         {
             foreach (Creature Creature in WannaFlee)
                 OnAlive?.Invoke(Creature);
+            OnEnded?.Invoke();
         }
     }
 }

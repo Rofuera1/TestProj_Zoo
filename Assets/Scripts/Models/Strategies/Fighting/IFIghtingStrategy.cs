@@ -6,11 +6,6 @@ namespace Core
 {
     public interface IFightingStrategy
     {
-        public void OnFight(Creature Creature, Creature Enemy, FightSyncronizer Fight);
-    }
-
-    public class FightSyncronizer
-    {
-        
+        public void OnFight(Creature Creature, Creature Enemy, FightSession Fight);
     }
 }
