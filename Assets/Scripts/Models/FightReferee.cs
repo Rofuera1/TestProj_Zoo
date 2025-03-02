@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Core
 {
-    public class FightReferee : MonoBehaviour
+    public class FightReferee : MonoBehaviour // Helping with syncronyzing all fights between creatures; No need to use async/hard connections between enemies, or debug the collisions
     {
         private Dictionary<string, FightSession> ActiveFights = new Dictionary<string, FightSession>();
 
@@ -15,7 +15,7 @@ namespace Core
             {
                 FightSession NewSession = new FightSession(FightKey);
 
-                NewSession.OnEnded += () => { OnFightEnded(NewSession); };
+                NewSession.OnEnded += () => { OnFightEnded(NewSession); }; // Technically, there's no need to unsubsctibe - the object will be destroyed, and if not - there'll be exception
 
                 ActiveFights.Add(FightKey, NewSession);
 
@@ -31,7 +31,7 @@ namespace Core
             ActiveFights.Remove(Session.FightID);
         }
 
-        private string ReturnSortedString(GameObject F, GameObject S)
+        private string ReturnSortedString(GameObject F, GameObject S) // Creating unique (and same) key for each two objects to store in the dictionary
         {
             int F_ID = F.GetInstanceID();
             int S_ID = S.GetInstanceID();
@@ -40,16 +40,16 @@ namespace Core
         }
     }
 
-    public class FightSession                                   // A way to keep collisions synchronized (For two objects only!)
+    public class FightSession                                   // A way to keep collisions synchronized (For two objects only!). Could be improved
     {
         public string FightID { get; private set; }
-        public List<Creature> WannaKill { get; private set; }   // This (List) is just a nice way to keep it logical - but there's always only two involvants!
+        public List<Creature> WannaKill { get; private set; }   // This (List) is just a nice way to keep it logical - but there's always only two involvants in the session!
         public List<Creature> WannaFlee { get; private set; }
 
-        public Action<Creature> OnAlive;
-        public Action<Creature> OnAliveAndKilled;
-        public Action<Creature> OnDead;
-        public Action OnEnded;
+        public event Action<Creature> OnAlive;
+        public event Action<Creature> OnAliveAndKilled;
+        public event Action<Creature> OnDead;
+        public event Action OnEnded;
 
         public FightSession(string ID)
         {
@@ -58,12 +58,18 @@ namespace Core
             WannaFlee = new List<Creature>();
         }
 
+        ///<summary>
+        /// Note that after adding last involvant, actions OnAlive, OnAliveAndKilled, OnDead and OnEnded will be called immediately. Better to subscribe before calling this func
+        ///</summary>
         public void AddKiller(Creature Creature)
         {
             WannaKill.Add(Creature);
             TryEndFight();
         }
 
+        ///<summary>
+        /// Note that after adding last involvant, actions OnAlive, OnAliveAndKilled, OnDead and OnEnded will be called immediately. Better to subscribe before calling this func
+        ///</summary>
         public void AddFleer(Creature Creature) // flier? fleer? flier? i wish google existed...
         {
             WannaFlee.Add(Creature);

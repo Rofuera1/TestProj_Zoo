@@ -18,6 +18,7 @@ namespace Core
         {
             IMovementStrategy Movement = null;
             IFightingStrategy Fighting = null;
+            FoodChainTypes Type = 0;
             Creature NewCreature = Pool.CreateCreature();
 
             switch(CreatureType)
@@ -29,7 +30,7 @@ namespace Core
                     break;
             }
 
-            NewCreature.Init(Movement, Fighting);
+            NewCreature.Init(Type, Movement, Fighting);
         }
     }
 }

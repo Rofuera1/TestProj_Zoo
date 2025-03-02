@@ -4,19 +4,21 @@ namespace Core
 {
     public class StateDying : State
     {
-        public override void OnEndState()
-        {
-            throw new System.NotImplementedException();
-        }
+        private Creature Creature;
 
         public override void OnStartState(Creature Creature)
         {
-            throw new System.NotImplementedException();
+            this.Creature = Creature;
+
+            Creature.Die();
         }
 
         public override void OnUpdate()
         {
-            throw new System.NotImplementedException();
+        }
+
+        public override void OnEndState()
+        {
         }
     }
 }

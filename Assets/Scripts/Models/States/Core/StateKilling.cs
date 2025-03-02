@@ -4,19 +4,36 @@ namespace Core
 {
     public class StateKilling : State
     {
-        public override void OnEndState()
+        private Creature KillingWho;
+        private Creature Creature;
+
+        public StateKilling(Creature Victim)
         {
-            throw new System.NotImplementedException();
+            KillingWho = Victim;
         }
 
         public override void OnStartState(Creature Creature)
         {
-            throw new System.NotImplementedException();
+            this.Creature = Creature;
+
+            OnKillVictim();
+        }
+
+        private void OnKillVictim()
+        {
+            // some animation with the use of async?
+
+            // TODO: call counter
+
+            Creature.ChangeState(new StateChoosingNewPath());
         }
 
         public override void OnUpdate()
         {
-            throw new System.NotImplementedException();
+        }
+
+        public override void OnEndState()
+        {
         }
     }
 }

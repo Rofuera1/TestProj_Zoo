@@ -10,10 +10,11 @@ namespace Core
         public void OnFight(Creature Creature, Creature Enemy, FightSession Fight)
         {
             CurrentFight = Fight;
-            CurrentFight.AddKiller(Creature);
 
             CurrentFight.OnAliveAndKilled += OnAliveAndKilled;
             CurrentFight.OnDead += OnDied;
+
+            CurrentFight.AddKiller(Creature);
         }
 
         private void OnDied(Creature creature)
@@ -21,6 +22,7 @@ namespace Core
             if (Creature == creature)
             {
                 Creature.ChangeState(new StateDying());
+                UnsubscribeFromFight();
             }
         }
 
@@ -28,8 +30,15 @@ namespace Core
         {
             if (Creature == creature)
             {
-                Creature.ChangeState(new StateKilling());
+                Creature.ChangeState(new StateKilling(Enemy));
+                UnsubscribeFromFight();
             }
+        }
+
+        private void UnsubscribeFromFight()
+        {
+            CurrentFight.OnAliveAndKilled -= OnAliveAndKilled;
+            CurrentFight.OnDead -= OnDied;
         }
     }
 }

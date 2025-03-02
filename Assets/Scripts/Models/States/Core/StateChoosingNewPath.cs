@@ -8,6 +8,7 @@ namespace Core
 
         public override void OnStartState(Creature Machine)
         {
+            this.Machine = Machine;
         }
         public override void OnUpdate()
         {

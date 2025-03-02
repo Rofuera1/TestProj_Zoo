@@ -4,11 +4,12 @@ namespace Core
 {
     public class StateFighting : State
     {
+        [Zenject.Inject] private FightReferee Referee;
+
         private Creature Creature;
         private Creature Enemy;
 
         private IFightingStrategy FightingStrategy;
-        [Zenject.Inject] private FightReferee Referee;
 
         public StateFighting(Creature Enemy)
         {

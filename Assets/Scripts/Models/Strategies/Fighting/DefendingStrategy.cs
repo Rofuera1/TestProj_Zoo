@@ -1,16 +1,47 @@
 using UnityEngine;
 
-public class DefendingStrategy : MonoBehaviour
+namespace Core
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public class DefendingStrategy : IFightingStrategy
     {
-        
-    }
+        private Creature Creature;
+        private Creature Enemy;
+        private FightSession Fight;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        public void OnFight(Creature Creature, Creature Enemy, FightSession Fight)
+        {
+            this.Creature = Creature;
+            this.Enemy = Enemy;
+            this.Fight = Fight;
+            
+            Fight.OnAlive += OnAlive;
+            Fight.OnDead += OnDied;
+
+            Fight.AddFleer(Creature);
+        }
+
+        private void OnAlive(Creature Creature)
+        {
+            if(this.Creature == Creature)
+            {
+                Creature.ChangeState(new StateChoosingNewPath());
+                UnsubscribeFromFight();
+            }
+        }
+
+        private void OnDied(Creature Creature)
+        {
+            if(this.Creature == Creature)
+            {
+                Creature.ChangeState(new StateDying());
+                UnsubscribeFromFight();
+            }
+        }
+
+        private void UnsubscribeFromFight()
+        {
+            Fight.OnAlive -= OnAlive;
+            Fight.OnDead -= OnDied;
+        }
     }
 }
