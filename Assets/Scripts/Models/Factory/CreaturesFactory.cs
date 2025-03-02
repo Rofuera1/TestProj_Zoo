@@ -8,11 +8,9 @@ namespace Core
         Snake
     }
 
-    public class CreaturesFactory : MonoBehaviour
+    public class CreaturesFactory : MonoBehaviour // Возможно, было бы проще с zenject, но мне нравится реализовывать свои фабрики + легко использовать пул
     {
-        [SerializeField] private GameObject CreaturePrefab;
-
-        private CreaturePool Pool;
+        [Zenject.Inject] private CreaturePool Pool;
 
         public void CreateCreature(CreatureTypes CreatureType) // TODO: Добавить обработчик ошибок
         {
@@ -26,7 +24,9 @@ namespace Core
                 case CreatureTypes.Frog:
                     break;
                 case CreatureTypes.Snake:
-                    Movement = new LinearMovement(NewCreature.GetComponent<Rigidbody>(), 1f);
+                    Movement = new LinearMovement(NewCreature.GetComponent<Rigidbody>(), 5f);
+                    Fighting = new AttackingStrategy();
+                    Type = FoodChainTypes.Predator;
                     break;
             }
 

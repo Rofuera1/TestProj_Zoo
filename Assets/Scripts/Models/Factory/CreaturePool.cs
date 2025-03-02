@@ -2,11 +2,11 @@ using UnityEngine;
 
 namespace Core
 {
-    public class CreaturePool : MonoBehaviour
+    public class CreaturePool : ObjectPool<Creature>
     {
-        public Creature CreateCreature()
+        private void Awake()
         {
-            return null;
+            Init(15);
         }
     }
 }

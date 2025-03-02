@@ -24,7 +24,7 @@ namespace Core
         {
             if(this.Creature == Creature)
             {
-                Creature.ChangeState(new StateChoosingNewPath());
+                Creature.ChangeState(new StateChoosingNewPath(PathChooser.Random));
                 UnsubscribeFromFight();
             }
         }

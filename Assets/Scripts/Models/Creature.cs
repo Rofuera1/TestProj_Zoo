@@ -27,7 +27,7 @@ namespace Core
             this.Movement = Movement;
             this.FightingStrategy = FightingStrategy;
 
-            ChangeState(new StateChoosingNewPath());
+            ChangeState(new StateChoosingNewPath(PathChooser.Random));
         }
 
         public void ChangeState(State NewState)
@@ -61,7 +61,7 @@ namespace Core
         {
             CallEvent("OnDied");
 
-            Destroy(gameObject);
+            // TODO: bind with zenject
         }
     }
 }

@@ -4,11 +4,12 @@ using UnityEngine;
 
 namespace Core
 {
-    public class FightReferee : MonoBehaviour // Helping with syncronyzing all fights between creatures; No need to use async/hard connections between enemies, or debug the collisions
+    public static class FightReferee // Helping with syncronyzing all fights between creatures; No need to use async/hard connections between enemies, or debug the collisions
+        // UPD: could make it with zenject, or smth else - but quickest way for small project is, ofcourse, being static
     {
-        private Dictionary<string, FightSession> ActiveFights = new Dictionary<string, FightSession>();
+        private static Dictionary<string, FightSession> ActiveFights = new Dictionary<string, FightSession>();
 
-        public FightSession GetCurrentFight(Creature Creature, Creature Enemy)
+        public static FightSession GetCurrentFight(Creature Creature, Creature Enemy)
         {
             string FightKey = ReturnSortedString(Creature.gameObject, Enemy.gameObject);
             if (!ActiveFights.ContainsKey(FightKey))
@@ -25,13 +26,13 @@ namespace Core
             return ActiveFights[FightKey];
         }
 
-        public void OnFightEnded(FightSession Session)
+        public static void OnFightEnded(FightSession Session)
         {
             if (!ActiveFights.ContainsKey(Session.FightID)) throw new Exception("No fight with " + Session.FightID + " found");
             ActiveFights.Remove(Session.FightID);
         }
 
-        private string ReturnSortedString(GameObject F, GameObject S) // Creating unique (and same) key for each two objects to store in the dictionary
+        private static string ReturnSortedString(GameObject F, GameObject S) // Creating unique (and same) key for each two objects to store in the dictionary
         {
             int F_ID = F.GetInstanceID();
             int S_ID = S.GetInstanceID();

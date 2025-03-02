@@ -31,7 +31,7 @@ namespace Core
         private void OnTriggerCollided(Collider Collider)
         {
             if (Collider.transform.tag == "Border")
-                Creature.ChangeState(new StateChoosingNewPath());
+                Creature.ChangeState(new StateChoosingNewPath(PathChooser.ToCenter));
         }
 
         public override void OnEndState()

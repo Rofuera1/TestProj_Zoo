@@ -25,7 +25,7 @@ namespace Core
 
             // TODO: call counter
 
-            Creature.ChangeState(new StateChoosingNewPath());
+            Creature.ChangeState(new StateMoving());
         }
 
         public override void OnUpdate()
