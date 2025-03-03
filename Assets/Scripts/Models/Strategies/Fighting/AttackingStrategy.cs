@@ -7,8 +7,13 @@ namespace Core
         private FightSession CurrentFight;
         public int AttackDamage { get; private set; }
 
+        [Zenject.Inject] private StateDying.Factory DyingFactory;
+        [Zenject.Inject] private StateKilling.Factory KillingFactory;
+
         public void OnFight(Creature Creature, Creature Enemy, FightSession Fight)
         {
+            this.Creature = Creature;
+            this.Enemy = Enemy;
             CurrentFight = Fight;
 
             CurrentFight.OnAliveAndKilled += OnAliveAndKilled;
@@ -21,7 +26,7 @@ namespace Core
         {
             if (Creature == creature)
             {
-                Creature.ChangeState(new StateDying());
+                Creature.ChangeState(DyingFactory.Create());
                 UnsubscribeFromFight();
             }
         }
@@ -30,7 +35,7 @@ namespace Core
         {
             if (Creature == creature)
             {
-                Creature.ChangeState(new StateKilling(Enemy));
+                Creature.ChangeState(KillingFactory.Create(Enemy));
                 UnsubscribeFromFight();
             }
         }

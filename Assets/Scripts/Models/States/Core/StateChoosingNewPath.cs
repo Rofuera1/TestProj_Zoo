@@ -13,6 +13,12 @@ namespace Core
         private Creature Machine;
         private PathChooser Path;
 
+        [Zenject.Inject] private StateMoving.Factory StateFactory;
+
+        public class Factory : Zenject.PlaceholderFactory<PathChooser, StateChoosingNewPath>
+        {
+        }
+
         public StateChoosingNewPath(PathChooser Path)
         {
             this.Path = Path;
@@ -44,7 +50,7 @@ namespace Core
                     RotateRandomly();
                 break;
             }
-            Machine.ChangeState(new StateMoving());
+            Machine.ChangeState(StateFactory.Create());
         }
 
         private void RotateRandomly()

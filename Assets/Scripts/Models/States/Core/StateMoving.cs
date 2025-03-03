@@ -7,10 +7,19 @@ namespace Core
         private Creature Creature;
         private IMovementStrategy Movement;
 
+        [Zenject.Inject] private StateFighting.Factory FightingFactory;
+        [Zenject.Inject] private StateChoosingNewPath.Factory PathFactory;
+
+        public class Factory : Zenject.PlaceholderFactory<StateMoving>
+        {
+        }
+
         public override void OnStartState(Creature Creature)
         {
             this.Creature = Creature;
             Movement = Creature.Movement;
+
+            Movement.Start();
 
             SubscribeToEvents();
         }
@@ -25,13 +34,13 @@ namespace Core
             Creature enemy = Collision.collider.GetComponent<Creature>();
 
             if (enemy)
-                Creature.ChangeState(new StateFighting(enemy));
+                Creature.ChangeState(FightingFactory.Create(enemy));
+            else if (Collision.transform.tag == "Border")
+                Creature.ChangeState(PathFactory.Create(PathChooser.ToCenter));
         }
 
         private void OnTriggerCollided(Collider Collider)
         {
-            if (Collider.transform.tag == "Border")
-                Creature.ChangeState(new StateChoosingNewPath(PathChooser.ToCenter));
         }
 
         public override void OnEndState()

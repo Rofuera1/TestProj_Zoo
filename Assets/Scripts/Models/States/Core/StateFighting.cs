@@ -7,7 +7,13 @@ namespace Core
         private Creature Creature;
         private Creature Enemy;
 
+        [Zenject.Inject] private FightReferee Referee;
         private IFightingStrategy FightingStrategy;
+
+        public class Factory: Zenject.PlaceholderFactory<Creature, StateFighting>
+        {
+
+        }
 
         public StateFighting(Creature Enemy)
         {
@@ -32,7 +38,7 @@ namespace Core
 
         private void ChooseWhoDies()
         {
-            FightSession Session = FightReferee.GetCurrentFight(Creature, Enemy);
+            FightSession Session = Referee.GetCurrentFight(Creature, Enemy);
             FightingStrategy.OnFight(Creature, Enemy, Session);
         }
     }

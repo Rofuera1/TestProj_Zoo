@@ -6,6 +6,11 @@ namespace Core
     {
         private Creature Creature;
 
+        public class Factory : Zenject.PlaceholderFactory<StateDying>
+        {
+
+        }
+
         public override void OnStartState(Creature Creature)
         {
             this.Creature = Creature;

@@ -4,19 +4,18 @@ using UnityEngine;
 
 namespace Core
 {
-    public static class FightReferee // Helping with syncronyzing all fights between creatures; No need to use async/hard connections between enemies, or debug the collisions
-        // UPD: could make it with zenject, or smth else - but quickest way for small project is, ofcourse, being static
+    public class FightReferee: MonoBehaviour // Helping with syncronyzing all fights between creatures; No need to use async/hard connections between enemies, or debug the collisions
     {
-        private static Dictionary<string, FightSession> ActiveFights = new Dictionary<string, FightSession>();
+        private Dictionary<string, FightSession> ActiveFights = new Dictionary<string, FightSession>();
 
-        public static FightSession GetCurrentFight(Creature Creature, Creature Enemy)
+        public FightSession GetCurrentFight(Creature Creature, Creature Enemy)
         {
             string FightKey = ReturnSortedString(Creature.gameObject, Enemy.gameObject);
             if (!ActiveFights.ContainsKey(FightKey))
             {
                 FightSession NewSession = new FightSession(FightKey);
 
-                NewSession.OnEnded += () => { OnFightEnded(NewSession); }; // Technically, there's no need to unsubsctibe - the object will be destroyed, and if not - there'll be exception
+                NewSession.OnEnded += () => { OnFightEnded(NewSession); }; // Technically, there's no need to unsubsctibe - the object will be destroyed, and if not - there'll be an exception
 
                 ActiveFights.Add(FightKey, NewSession);
 
@@ -26,13 +25,13 @@ namespace Core
             return ActiveFights[FightKey];
         }
 
-        public static void OnFightEnded(FightSession Session)
+        public void OnFightEnded(FightSession Session)
         {
             if (!ActiveFights.ContainsKey(Session.FightID)) throw new Exception("No fight with " + Session.FightID + " found");
             ActiveFights.Remove(Session.FightID);
         }
 
-        private static string ReturnSortedString(GameObject F, GameObject S) // Creating unique (and same) key for each two objects to store in the dictionary
+        private string ReturnSortedString(GameObject F, GameObject S) // Creating unique (and same) key for each two objects to store in the dictionary
         {
             int F_ID = F.GetInstanceID();
             int S_ID = S.GetInstanceID();
@@ -80,6 +79,7 @@ namespace Core
         private void TryEndFight() // meaning "try to resolve conflict": if there's already two involvants, then via some logic, tell each one of them what happened: they died, fleed, or alive (and killed someone)
         {
             if (WannaKill.Count + WannaFlee.Count < 2) return;
+
 
             bool anyKillers = WannaKill.Count > 0;
             if (anyKillers)

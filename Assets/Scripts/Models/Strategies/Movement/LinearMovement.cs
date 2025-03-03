@@ -20,5 +20,9 @@ namespace Core
 
             Rigidbody.MovePosition(newPosition);
         }
+
+        public void Start()
+        {
+        }
     }
 }

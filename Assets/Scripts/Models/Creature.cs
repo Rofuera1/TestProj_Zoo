@@ -19,6 +19,9 @@ namespace Core
         public event Action<Collider> OnTriggerCollided;
         public event Action<string> OnAction;
 
+        [Zenject.Inject] private StateChoosingNewPath.Factory StateFactory;
+        [Zenject.Inject] private Zenject.SignalBus Signaller;
+
         private State CurrentState;
 
         public void Init(FoodChainTypes Type, IMovementStrategy Movement, IFightingStrategy FightingStrategy) // Is initialized from fabric
@@ -27,7 +30,7 @@ namespace Core
             this.Movement = Movement;
             this.FightingStrategy = FightingStrategy;
 
-            ChangeState(new StateChoosingNewPath(PathChooser.Random));
+            ChangeState(StateFactory.Create(PathChooser.Random));
         }
 
         public void ChangeState(State NewState)
@@ -59,9 +62,15 @@ namespace Core
 
         public void Die()
         {
+            Debug.Log("Creature died");
             CallEvent("OnDied");
 
-            // TODO: bind with zenject
+            Signaller.Fire(new CreatureDiedSignal { Creature = this });
+        }
+
+        public class CreatureDiedSignal
+        {
+            public Creature Creature;
         }
     }
 }

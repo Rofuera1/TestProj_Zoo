@@ -7,6 +7,13 @@ namespace Core
         private Creature KillingWho;
         private Creature Creature;
 
+        //[Zenject.Inject] private StateMoving.Factory MovingFactory;
+        [Zenject.Inject] private StateChoosingNewPath.Factory PathChoosingFactory;
+
+        public class Factory : Zenject.PlaceholderFactory<Creature, StateKilling>
+        {
+        }
+
         public StateKilling(Creature Victim)
         {
             KillingWho = Victim;
@@ -25,7 +32,7 @@ namespace Core
 
             // TODO: call counter
 
-            Creature.ChangeState(new StateMoving());
+            Creature.ChangeState(PathChoosingFactory.Create(PathChooser.Random));
         }
 
         public override void OnUpdate()

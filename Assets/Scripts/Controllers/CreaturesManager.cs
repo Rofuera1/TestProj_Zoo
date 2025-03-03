@@ -6,6 +6,7 @@ namespace Core
     public class CreaturesManager : MonoBehaviour
     {
         [SerializeField] private float SecondsDelay; // TODO: Move to scriptables
+
         [Zenject.Inject] private CreaturesFactory Factory;
 
         private void Awake()
@@ -25,7 +26,7 @@ namespace Core
 
         private void CreateObject()
         {
-            Factory.CreateCreature((CreatureTypes.Snake));
+            Factory.CreateCreature((CreatureTypes.Frog));
         }
     }
 }

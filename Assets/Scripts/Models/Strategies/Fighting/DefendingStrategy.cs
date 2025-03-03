@@ -8,6 +8,9 @@ namespace Core
         private Creature Enemy;
         private FightSession Fight;
 
+        [Zenject.Inject] private StateChoosingNewPath.Factory ChoosingPathFactory;
+        [Zenject.Inject] private StateDying.Factory DyingFactory;
+
         public void OnFight(Creature Creature, Creature Enemy, FightSession Fight)
         {
             this.Creature = Creature;
@@ -24,7 +27,7 @@ namespace Core
         {
             if(this.Creature == Creature)
             {
-                Creature.ChangeState(new StateChoosingNewPath(PathChooser.Random));
+                Creature.ChangeState(ChoosingPathFactory.Create(PathChooser.Random));
                 UnsubscribeFromFight();
             }
         }
@@ -33,7 +36,7 @@ namespace Core
         {
             if(this.Creature == Creature)
             {
-                Creature.ChangeState(new StateDying());
+                Creature.ChangeState(DyingFactory.Create());
                 UnsubscribeFromFight();
             }
         }
