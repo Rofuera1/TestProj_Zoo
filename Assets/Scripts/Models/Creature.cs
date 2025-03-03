@@ -62,7 +62,6 @@ namespace Core
 
         public void Die()
         {
-            Debug.Log("Creature died");
             CallEvent("OnDied");
 
             Signaller.Fire(new CreatureDiedSignal { Creature = this });

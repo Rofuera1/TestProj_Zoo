@@ -1,4 +1,5 @@
 using UnityEngine;
+using Zenject;
 
 namespace Core
 {
@@ -10,9 +11,11 @@ namespace Core
 
     public class CreaturesFactory : MonoBehaviour
     {
-        [Zenject.Inject] private CreaturePool Pool;
-        [Zenject.Inject] private Zenject.DiContainer Container;
-        [Zenject.Inject] private Zenject.SignalBus Signaller;
+        [Inject] private CreaturePool Pool;
+        [Inject] private CreaturesPainter Painter;
+
+        [Inject] private DiContainer Container;
+        [Inject] private SignalBus Signaller;
 
         private void Awake()
         {
@@ -29,7 +32,7 @@ namespace Core
             switch(CreatureType)
             {
                 case CreatureTypes.Frog:
-                    Movement = new JumpingMovement(NewCreature.GetComponent<Rigidbody>(), 5f);
+                    Movement = new JumpingMovement(NewCreature.GetComponent<Rigidbody>(), 5f, 1f);
                     Fighting = Container.Instantiate<DefendingStrategy>();
                     Type = FoodChainTypes.Prey;
                     break;
@@ -41,6 +44,7 @@ namespace Core
             }
 
             NewCreature.Init(Type, Movement, Fighting);
+            Painter.PaintCreatureOnStart(NewCreature);
         }
 
         public void CreatureDied(Creature.CreatureDiedSignal CreatureSignal)

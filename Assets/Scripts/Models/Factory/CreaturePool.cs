@@ -8,10 +8,16 @@ namespace Core
         [SerializeField] private Creature[] ObjectsOnScene;
         [SerializeField] private Creature Prefab;
         [SerializeField] private Transform PositionToSpawnAt;
+        [SerializeField] private Transform ParentToSpawnUnder;
 
         [Inject] private DiContainer Container;
 
         private int CurrentFlag = 0;
+
+        private void Awake()
+        {
+            Init(10);
+        }
 
         public void Init(int StartAmount)
         {
@@ -54,7 +60,7 @@ namespace Core
                             Prefab,
                             PositionToSpawnAt.position,
                             Quaternion.identity,
-                            PositionToSpawnAt);
+                            ParentToSpawnUnder);
         }
     }
 }

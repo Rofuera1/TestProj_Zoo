@@ -13,7 +13,7 @@ namespace Core
             this.Velocity = Velocity;
         }
 
-        public void Move(float DeltaTime)
+        public void MoveOnUpdate(float DeltaTime)
         {
             Vector3 movement = Rigidbody.transform.forward * Velocity * DeltaTime;
             Vector3 newPosition = Rigidbody.position + movement;

@@ -26,7 +26,7 @@ namespace Core
 
         public override void OnUpdate()
         {
-            Movement.Move(Time.deltaTime);
+            Movement.MoveOnUpdate(Time.deltaTime);
         }
 
         private void OnCollided(Collision Collision)
@@ -37,6 +37,8 @@ namespace Core
                 Creature.ChangeState(FightingFactory.Create(enemy));
             else if (Collision.transform.tag == "Border")
                 Creature.ChangeState(PathFactory.Create(PathChooser.ToCenter));
+            else if (Collision.transform.tag == "Wall")
+                Creature.ChangeState(PathFactory.Create(PathChooser.Random));
         }
 
         private void OnTriggerCollided(Collider Collider)

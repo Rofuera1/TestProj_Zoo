@@ -55,7 +55,7 @@ namespace Core
 
         private void RotateRandomly()
         {
-            Machine.transform.Rotate(Vector3.up * Random.Range(0f, 180f));
+            Machine.transform.Rotate(Vector3.up * Random.Range(90f, 270f));
         }
 
         private void RotateTowardsZeroPoint()

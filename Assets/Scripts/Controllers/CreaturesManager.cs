@@ -26,7 +26,7 @@ namespace Core
 
         private void CreateObject()
         {
-            Factory.CreateCreature((CreatureTypes.Frog));
+            Factory.CreateCreature((CreatureTypes)Random.Range(0, 2));
         }
     }
 }

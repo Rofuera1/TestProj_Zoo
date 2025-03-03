@@ -12,6 +12,7 @@ namespace Core
             Container.Bind<CreaturePool>().FromComponentInHierarchy().AsSingle();
             Container.Bind<CreaturesFactory>().FromComponentInHierarchy().AsSingle();
             Container.Bind<FightReferee>().FromComponentInHierarchy().AsSingle();
+            Container.Bind<CreaturesPainter>().FromComponentInHierarchy().AsSingle();
 
             BindStates();
         }
