@@ -7,7 +7,8 @@ namespace Core
         public override void InstallBindings()
         {
             SignalBusInstaller.Install(Container);
-            Container.DeclareSignal<Creature.CreatureDiedSignal>();
+
+            DeclareSignals();
 
             Container.Bind<CreaturePool>().FromComponentInHierarchy().AsSingle();
             Container.Bind<CreaturesFactory>().FromComponentInHierarchy().AsSingle();
@@ -24,6 +25,12 @@ namespace Core
             Container.BindFactory<Creature, StateFighting, StateFighting.Factory>().FromNew();
             Container.BindFactory<StateDying, StateDying.Factory>().FromNew();
             Container.BindFactory<Creature, StateKilling, StateKilling.Factory>().FromNew();
+        }
+
+        private void DeclareSignals()
+        {
+            Container.DeclareSignal<Creature.CreatureAction>();
+            Container.DeclareSignal<Statistics>();
         }
     }
 }

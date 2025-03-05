@@ -28,10 +28,7 @@ namespace Core
 
         private void OnKillVictim()
         {
-            // some animation with the use of async?
-
-            // TODO: call counter
-
+            Creature.CallEvent(Creature.EventTypes.OnKilled);
             Creature.ChangeState(PathChoosingFactory.Create(PathChooser.Random));
         }
 

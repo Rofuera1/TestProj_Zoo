@@ -3,24 +3,19 @@ using Zenject;
 
 namespace Core
 {
-    public enum CreatureTypes // Самый простой для понимания способ где-то хранить всех возможных животных при малых объемах
-    {
-        Frog,
-        Snake
-    }
 
     public class CreaturesFactory : MonoBehaviour
     {
+        public enum CreatureTypes // Самый простой для понимания способ где-то хранить всех возможных животных при малых объемах
+        {
+            Frog,
+            Snake
+        }
+
         [Inject] private CreaturePool Pool;
         [Inject] private CreaturesPainter Painter;
 
         [Inject] private DiContainer Container;
-        [Inject] private SignalBus Signaller;
-
-        private void Awake()
-        {
-            Signaller.Subscribe<Creature.CreatureDiedSignal>(CreatureDied);
-        }
 
         public void CreateCreature(CreatureTypes CreatureType)
         {
@@ -47,9 +42,9 @@ namespace Core
             Painter.PaintCreatureOnStart(NewCreature);
         }
 
-        public void CreatureDied(Creature.CreatureDiedSignal CreatureSignal)
+        public void CreatureDied(Creature Creature)
         {
-            Pool.ReturnCreatureBackToPool(CreatureSignal.Creature);
+            Pool.ReturnCreatureBackToPool(Creature);
         }
     }
 }

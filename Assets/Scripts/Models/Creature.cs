@@ -55,21 +55,28 @@ namespace Core
             OnTriggerCollided?.Invoke(other);
         }
 
-        public void CallEvent(string Event) // Perhaps, it's better to use enum - but for now strings will work just fine
+        public void CallEvent(EventTypes Event)
         {
-            OnAction?.Invoke(Event);
+            OnAction?.Invoke(Event.ToString());
+
+            Signaller.Fire(new CreatureAction() { Creature = this, Action = Event });
         }
 
         public void Die()
         {
-            CallEvent("OnDied");
-
-            Signaller.Fire(new CreatureDiedSignal { Creature = this });
+            CallEvent(EventTypes.OnDied);
         }
 
-        public class CreatureDiedSignal
+        public class CreatureAction
         {
             public Creature Creature;
+            public EventTypes Action;
+        }
+
+        public enum EventTypes
+        {
+            OnKilled,
+            OnDied
         }
     }
 }
