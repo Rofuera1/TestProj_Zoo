@@ -7,6 +7,8 @@ Simple 3D Game: Prey/Predator Creatures appear on scene. Via food chain logic, t
 ### Used ones
 - Zenject
 - DoTween (was used at some point, changed to Coroutines at the `Scripts/Visual/Effects/Signgle Effects/OnKillEffect.cs`)
+## ToDo
+Yet to add Scriptables for more flexible adjusting of the gamedesign params
 ## Code Description
 ### Entry point
 - Main logic aligns with MVC pattern, so all controlls are made from `Scripts/Controllers/CreaturesManager.cs`  
