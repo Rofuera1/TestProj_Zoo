@@ -222,4 +222,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EffectName: 0
-  LastingTime: 5
+  LastingTime: 1.8

@@ -24,7 +24,6 @@ namespace Core
             foreach(var Effect in EffectsPrefabs)
             {
                 if (EffectsDictionary.ContainsKey(Effect.Name)) throw new System.Exception("Two effects with the same name: " + Effect.name);
-                Debug.Log("Added " + Effect.Name);
 
                 EffectsDictionary.Add(Effect.Name, Effect);
             }

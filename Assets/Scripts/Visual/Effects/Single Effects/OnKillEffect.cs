@@ -32,7 +32,7 @@ namespace Core.Effects
             Vector3 refVector = Vector3.zero;
             StartCoroutine(LerpFromParentDown(0.2f));
 
-            while(t < LastingTime)
+            while(t < LastingTime && EffectAt.gameObject)
             {
                 t += Time.deltaTime;
 
@@ -47,15 +47,23 @@ namespace Core.Effects
         private IEnumerator LerpFromParentDown(float time)
         {
             float t = 0f;
+            float moveDownBy = 1.2f;
 
             while(t < time)
             {
                 t += Time.deltaTime;
 
-                NeededPosition = Vector3.Lerp(EffectAt.position, EffectAt.position + Vector3.down, t / time);
+                NeededPosition = Vector3.Lerp(EffectAt.position, EffectAt.position - Vector3.forward * moveDownBy, t / time);
 
                 yield return null;
             }
+
+            while(true)
+            {
+                NeededPosition = EffectAt.position - Vector3.forward * moveDownBy;
+
+                yield return null;
+            }    
         }
     }
 }
