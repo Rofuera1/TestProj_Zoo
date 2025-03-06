@@ -28,10 +28,13 @@ Fighting occurs, when the collision happens. For less dependent collision events
 - When collision happens, every involvant registers it with the Referee, using unique FightKey (based on the GetInstanceID of the GameObjects).
 - When both of the creatures are registered, the logic of the fight (for now - the easiest one: random) applies, calling the *OnAlive*, *OnAliveAndKilled* and *OnDead* events with *Creature* parameter - so the involvants can see the after-match state
 - Also, the *OnEnded* action is called - now it's used only to remove the fight from the Referee's memory
+
 Currently, there are two instances:
 - AttackingStrategy
 - DefendingStrategy
+   
 **NOTE**: Before adding the creature to the fight, creature must be subscribed to fight's actions: if the creature is the last involvant, the results of the fight will be called immediately  
+   
 - Each Creature has the *IFightingStrategy* - it's instances are stored at `Scripts/Models/Strategies/Fighting` - and are assigned with the *CreaturesFactory*  
 - FightingStrategy is called from the *StateFighting* with the reference to the current *FightSession* (returned from the Referee) - so that the Creature can decide to Flee, Attack or do something else  
 ### Actions
