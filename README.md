@@ -15,14 +15,14 @@ Simple 3D Game: Prey/Predator Creatures appear on scene. Via food chain logic, t
 ### Creature Logic
 Main Creature script is located at `Scripts/Models/Creature.cs` - and contains of:  
 1. Init function: called from `CreaturesFactory`
-2. Current `IState` - main logic is divided with the "State" pattern. For more, look at [States](##states)
-3. Actions for Collision, TriggerCollision and Actions. First two are called by MonoBehaviour logic, as where the "OnAction" is called from `public void CallEvent(EventTypes Event)`. It's made for local use (and doesn't apply anywhere) - but this method also calles the Zenject.SignalBus for global use. For more info on actions, read the [Actions](##actions)
+2. Current `IState` - main logic is divided with the "State" pattern. For more, look at [States](###states)
+3. Actions for Collision, TriggerCollision and Actions. First two are called by MonoBehaviour logic, as where the "OnAction" is called from `public void CallEvent(EventTypes Event)`. It's made for local use (and doesn't apply anywhere) - but this method also calles the Zenject.SignalBus for global use. For more info on actions, read the [Actions](###actions)
 ### States
 All states are located at `Scripts/Model/States`
 1. *StateChoosingNewPath* - main logic entry: for rotating Creature object with the chosen path.
 2. *StateMoving* - for moving via chosen `IMovementStrategy`.
-3. *StateFighting* is called from Moving, when collision with another Creature occurs, choosing creature's involvment in fighting with the help of a `IFightingStrategy` (For more - look at [Fighting Section](##fighting))
-4. *StateKilling*, *StateDying* and *StateChoosingNewPath* comes after fighting, depending on the result of the fight (For more - look at [Fighting Section](##fighting))
+3. *StateFighting* is called from Moving, when collision with another Creature occurs, choosing creature's involvment in fighting with the help of a `IFightingStrategy` (For more - look at [Fighting Section](###fighting))
+4. *StateKilling*, *StateDying* and *StateChoosingNewPath* comes after fighting, depending on the result of the fight (For more - look at [Fighting Section](###fighting))
 ### Fighting
 Fighting occurs, when the collision happens. For less dependent collision events, I chose to use `Scripts/Models/FightReferee.cs` as a middle-script to handle all the fights:  
 - When collision happens, every involvant registers it with the Referee, using unique FightKey (based on the GetInstanceID of the GameObjects).
